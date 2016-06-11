@@ -1,22 +1,57 @@
 <!doctype html>
 <html ng-app="exploreBible">
-<head></head>
+<head>
+  <title>ExploreBible</title>
+  <style>
+  body {
+    cursor:default;
+  }
+  .w:hover {
+    background-color:#ddd;
+    border-radius:2px;
+  }
+  .textDisplay {
+    transition: all .2s ease-in-out;
+    transform-origin:0 0;
+  }
+  .viewBook {
+    transform: scale(.25);
+  }
+  .viewVerse {
+    transform: scale(2.5);
+  }
+  .sel .w {
+    background-color:red;
+  }
+  button {
+    border:solid 1px #666;
+    background-color:#fff;
+  }
+  button:focus {
+    outline:none;
+  }
+  button.sel {
+    background-color:#ccc;
+  }
+  </style>
+</head>
 
 <body ng-controller="BibleCtrl">
+  <nav ng-init="view=1">
+    <button ng-click="view=0" ng-class="{sel:view==0}">Book</button><button ng-click="view=1" ng-class="{sel:view==1}">Chapter</button><button ng-click="view=2" ng-class="{sel:view==2}">Verse</button>
+  </nav>
+  <div class="widgets" ng-show="selectedWord">
+    <h3>{{selectedWord.word}}</h3>
     <ul>
-      <li ng-repeat="message in messages">
-        <!-- edit a message -->
-        <input ng-model="message.text" ng-change="messages.$save(message)" />
-        <!-- delete a message -->
-        <button ng-click="messages.$remove(message)">Delete Message</button>
-      </li>
+      <li>Lemma: {{selectedWord.lemma}}</li>
+      <li>Part of speech: {{selectedWord.pos}}</li>
+      <li>Dep: {{selectedWord.dep}}</li>
+      <li>Tag: {{selectedWord.tag}}</li>
     </ul>
-    <!-- push a new message onto the array -->
-    <form ng-submit="addMessage()">
-      <input ng-model="newMessageText" />
-      <button type="submit">Add Message</button>
-    </form>
-
+  </div>
+  <div class="textDisplay" ng-class="{viewBook:view==0, viewChap:view==1, viewVerse:view==2, }">
+    <p ng-repeat="sent in sents"><span ng-repeat="word in sent.words" data-lemma="{{word.lemma}}" ng-click="selectWord(word, sent)" ng-class="{sel:selectedWord==word}"><span ng-class="{w:!word.isPunct}">{{word.word}}</span>{{word.whitespace}}</span></p>
+  </div>
 <!-- AngularJS -->
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
 
