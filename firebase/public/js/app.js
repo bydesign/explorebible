@@ -17,11 +17,23 @@ app.controller("BibleCtrl", function($scope, $firebaseArray, $http) {
   });*/
 
   $scope.selectWord = function(word, sent) {
-    console.log(word);
     $scope.selectedWord = word;
     $scope.selectedSent = sent;
-    console.log(sent);
   };
+
+  $scope.calcOccur = function(selectedWord) {
+    if (selectedWord != undefined) {
+      var count = 0;
+      angular.forEach($scope.sents, function(sent) {
+        angular.forEach(sent.words, function(word) {
+          if (word.lemma == selectedWord.lemma) {
+            count++;
+          }
+        });
+      });
+      return count;
+    }
+  }
 
   // create a synchronized array
   $scope.messages = $firebaseArray(ref);

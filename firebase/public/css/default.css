@@ -1,0 +1,69 @@
+body {
+  cursor:default;
+  font-family: 'Roboto Slab', serif;
+}
+nav {
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  background-color:rgba(255,255,255,.75);
+  text-align: center;
+  z-index:100;
+}
+.widgets {
+  position:fixed;
+  top:0;
+  right:0;
+  width:25%;
+  padding:2em;
+  background-color:rgba(255,255,255,.75);
+}
+h1 {
+  font-weight:500;
+  font-size:2.5em;
+  text-align: center;
+}
+.w:hover {
+  border-bottom:solid 2px #ddd;
+}
+.textDisplay {
+  transition: all .2s ease-in-out;
+  transform-origin:0 0;
+  font-size:1.2em;
+  padding: 3em;
+  font-weight:300;
+  width:100%;
+  box-sizing: border-box;
+}
+.viewBook {
+  transform: scale(.5);
+  width:200%;
+}
+.viewVerse {
+  transform: scale(2.5);
+  padding:1em;
+}
+.sim .w {
+  background-color:#ddd;
+}
+.sel > .w {
+  background-color:red;
+}
+p {
+  border-left: solid 5px transparent;
+  padding-left:.5em
+}
+p.sel {
+  border-left-color: #ccc;
+}
+button {
+  border:solid 1px #666;
+  background-color:#fff;
+}
+button:focus {
+  outline:none;
+}
+button.sel {
+  background-color:#ccc;
+}

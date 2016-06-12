@@ -16,8 +16,11 @@ class Triple():
         self.obj = obj
 
     def __unicode__(self):
-        if self.subj or self.verb or self.obj:
+        if self.is_populated():
             return '------------------\n%s -> %s -> %s' % (self.subj, self.verb, self.obj)
+
+    def is_populated(self):
+        return if self.subj or self.verb or self.obj
 
     def __str__(self):
         return self.__unicode__()
@@ -27,9 +30,14 @@ class Triple():
         if str:
             print str
 
+    def add_to_dict(self, json_dict):
+        if self.is_populated():
+            json_dict.add_triple(self)
+
 class JsonPrinter():
     def __init__(self):
         self.obj = []
+        self.triples = []
 
     def add_sentence(self):
         self.obj.append({
@@ -47,6 +55,13 @@ class JsonPrinter():
             'whitespace': token.whitespace_,
             'isPunct': token.is_punct
         })
+
+    def add_triple(self, triple):
+        self.triples.append({
+            'subj': triple.subj,
+            'verb': triple.verb,
+            'obj': triple.obj
+        });
 
     def toJson(self):
         return json.dumps(self.obj, indent=4)
@@ -85,13 +100,17 @@ def make_triple(token, parent_triple=None, level=0, conj_type=None, json_printer
             if token.dep_ in subjects or conj_type in subjects:
                 trip = Triple(subj=child, verb=parent_triple.verb, obj=parent_triple.obj)
                 if PRINT_TRIPLES: trip.printobj()
+                trip.add_to_dict(json_printer)
 
             # handle multiple objects
             elif token.dep_ in objects or conj_type in objects:
                 trip = Triple(subj=parent_triple.subj, verb=parent_triple.verb, obj=child)
                 if PRINT_TRIPLES: trip.printobj()
+                trip.add_to_dict(json_printer)
 
-    if PRINT_TRIPLES and triple: triple.printobj()
+    if triple:
+        if PRINT_TRIPLES: triple.printobj()
+        triple.add_to_dict(json_printer)
 
     for child in token.children:
         lev_str = ' - '
