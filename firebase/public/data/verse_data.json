@@ -401,7 +401,7 @@
             }, 
             {
                 "word": ".", 
-                "whitespace": "", 
+                "whitespace": " ", 
                 "dep": "punct", 
                 "pos": "PUNCT", 
                 "lemma": ".", 
@@ -966,7 +966,7 @@
             }, 
             {
                 "word": ".", 
-                "whitespace": "", 
+                "whitespace": " ", 
                 "dep": "punct", 
                 "pos": "PUNCT", 
                 "lemma": ".", 
@@ -1675,7 +1675,7 @@
             }, 
             {
                 "word": ".", 
-                "whitespace": "", 
+                "whitespace": " ", 
                 "dep": "punct", 
                 "pos": "PUNCT", 
                 "lemma": ".", 
@@ -2208,7 +2208,7 @@
             }, 
             {
                 "word": ".", 
-                "whitespace": "", 
+                "whitespace": " ", 
                 "dep": "punct", 
                 "pos": "PUNCT", 
                 "lemma": ".", 
@@ -3079,7 +3079,7 @@
             }, 
             {
                 "word": ".", 
-                "whitespace": "", 
+                "whitespace": " ", 
                 "dep": "punct", 
                 "pos": "PUNCT", 
                 "lemma": ".", 
@@ -4415,7 +4415,7 @@
             }, 
             {
                 "word": ".", 
-                "whitespace": "", 
+                "whitespace": " ", 
                 "dep": "punct", 
                 "pos": "PUNCT", 
                 "lemma": ".", 
@@ -5471,7 +5471,7 @@
             }, 
             {
                 "word": ".", 
-                "whitespace": "", 
+                "whitespace": " ", 
                 "dep": "punct", 
                 "pos": "PUNCT", 
                 "lemma": ".", 
@@ -6166,7 +6166,7 @@
             }, 
             {
                 "word": ".", 
-                "whitespace": "", 
+                "whitespace": " ", 
                 "dep": "punct", 
                 "pos": "PUNCT", 
                 "lemma": ".", 
@@ -6661,12 +6661,44 @@
                 "isPunct": false
             }, 
             {
-                "word": "earth.\"So", 
-                "whitespace": " ", 
+                "word": "earth", 
+                "whitespace": "", 
                 "dep": "pobj", 
                 "pos": "NOUN", 
-                "lemma": "earth.\"so", 
+                "lemma": "earth", 
                 "tag": "NN", 
+                "isPunct": false
+            }, 
+            {
+                "word": ".", 
+                "whitespace": "", 
+                "dep": "punct", 
+                "pos": "PUNCT", 
+                "lemma": ".", 
+                "tag": ".", 
+                "isPunct": true
+            }, 
+            {
+                "word": "\"", 
+                "whitespace": " ", 
+                "dep": "punct", 
+                "pos": "PUNCT", 
+                "lemma": "\"", 
+                "tag": "``", 
+                "isPunct": true
+            }
+        ]
+    }, 
+    {
+        "root": null, 
+        "words": [
+            {
+                "word": "So", 
+                "whitespace": " ", 
+                "dep": "advmod", 
+                "pos": "ADV", 
+                "lemma": "so", 
+                "tag": "RB", 
                 "isPunct": false
             }, 
             {
@@ -6681,7 +6713,7 @@
             {
                 "word": "created", 
                 "whitespace": " ", 
-                "dep": "relcl", 
+                "dep": "ccomp", 
                 "pos": "VERB", 
                 "lemma": "create", 
                 "tag": "VBD", 
@@ -6734,7 +6766,7 @@
             }, 
             {
                 "word": ",", 
-                "whitespace": "", 
+                "whitespace": " ", 
                 "dep": "punct", 
                 "pos": "PUNCT", 
                 "lemma": ",", 
@@ -6805,11 +6837,29 @@
                 "isPunct": false
             }, 
             {
-                "word": "him;male", 
+                "word": "him", 
+                "whitespace": "", 
+                "dep": "dobj", 
+                "pos": "PRON", 
+                "lemma": "him", 
+                "tag": "PRP", 
+                "isPunct": false
+            }, 
+            {
+                "word": ";", 
                 "whitespace": " ", 
-                "dep": "dative", 
+                "dep": "punct", 
+                "pos": "PUNCT", 
+                "lemma": ";", 
+                "tag": ":", 
+                "isPunct": true
+            }, 
+            {
+                "word": "male", 
+                "whitespace": " ", 
+                "dep": "advcl", 
                 "pos": "ADJ", 
-                "lemma": "him;male", 
+                "lemma": "male", 
                 "tag": "JJ", 
                 "isPunct": false
             }, 
@@ -6843,7 +6893,7 @@
             {
                 "word": "created", 
                 "whitespace": " ", 
-                "dep": "ccomp", 
+                "dep": "ROOT", 
                 "pos": "VERB", 
                 "lemma": "create", 
                 "tag": "VBD", 
@@ -6860,7 +6910,7 @@
             }, 
             {
                 "word": ".", 
-                "whitespace": "", 
+                "whitespace": " ", 
                 "dep": "punct", 
                 "pos": "PUNCT", 
                 "lemma": ".", 
@@ -7267,7 +7317,7 @@
             {
                 "word": "living", 
                 "whitespace": " ", 
-                "dep": "compound", 
+                "dep": "amod", 
                 "pos": "NOUN", 
                 "lemma": "living", 
                 "tag": "NN", 
@@ -7596,7 +7646,7 @@
             {
                 "word": "tree", 
                 "whitespace": " ", 
-                "dep": "conj", 
+                "dep": "dobj", 
                 "pos": "NOUN", 
                 "lemma": "tree", 
                 "tag": "NN", 

@@ -3,12 +3,27 @@ app.controller("BibleCtrl", function($scope, $firebaseArray, $http) {
   var ref = firebase.database().ref().child("messages");
   var sentRef = firebase.database().ref().child("sentences");
   $scope.sents = $firebaseArray(sentRef);
+  var booksRef = firebase.database().ref().child("books");
+  $scope.divisions = $firebaseArray(booksRef);
   /*$http({
       method : "GET",
       url : "/data/verse_data.json"
   }).then(function mySuccess(response) {
       angular.forEach(response.data, function(item) {
         $scope.sents.$add(item);
+        console.log(item);
+      });
+
+  }, function myError(response) {
+      console.log(response.statusText);
+  });*/
+
+  /*$http({
+      method : "GET",
+      url : "/data/books.json"
+  }).then(function mySuccess(response) {
+      angular.forEach(response.data, function(item) {
+        $scope.books.$add(item);
         console.log(item);
       });
 

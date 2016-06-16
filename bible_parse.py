@@ -4,8 +4,8 @@ nlp = spacy.load('en')
 
 ### SETTINGS ###
 PRINT_TREE = False
-PRINT_JSON = True
-PRINT_TRIPLES = True
+PRINT_JSON = False
+PRINT_TRIPLES = False
 
 # class to store and manipulate triple data
 # generally this includes subject, verb, object triples
@@ -17,10 +17,12 @@ class Triple():
 
     def __unicode__(self):
         if self.is_populated():
-            return '------------------\n%s -> %s -> %s' % (self.subj, self.verb, self.obj)
+            return '%s %s %s' % (self.subj, self.verb, self.obj)
+        else:
+            return ''
 
     def is_populated(self):
-        return if self.subj or self.verb or self.obj
+        return bool(self.subj or self.verb or self.obj)
 
     def __str__(self):
         return self.__unicode__()
@@ -58,17 +60,21 @@ class JsonPrinter():
 
     def add_triple(self, triple):
         self.triples.append({
-            'subj': triple.subj,
-            'verb': triple.verb,
-            'obj': triple.obj
+            'subj': unicode(triple.subj),
+            'verb': unicode(triple.verb),
+            'obj': unicode(triple.obj)
         });
 
     def toJson(self):
         return json.dumps(self.obj, indent=4)
 
     def toFile(self):
-        jsonfile = open('verse_data.json', 'w')
+        jsonfile = open('firebase/public/data/verse_data.json', 'w')
         jsonfile.write(self.toJson())
+        jsonfile.close()
+
+        jsonfile = open('firebase/public/data/triple_data.json', 'w')
+        jsonfile.write(json.dumps(self.triples, indent=4))
         jsonfile.close()
 
     def __unicode__(self):
@@ -82,7 +88,7 @@ verbs = ['root', 'ccomp', 'relcl']
 subjects = ['nsubj']
 objects = ['acomp','dobj']
 
-def make_triple(token, parent_triple=None, level=0, conj_type=None, json_printer=None):
+def make_triples(token, parent_triple=None, level=0, conj_type=None, json_printer=None):
     triple = Triple()
     triples = [triple]
 
@@ -123,13 +129,23 @@ def make_triple(token, parent_triple=None, level=0, conj_type=None, json_printer
         if child.dep_ == 'conj':
             child_conj_type = conj_type or token.dep_
             triple = parent_triple
-        make_triple(child, triple, level+1, child_conj_type, json_printer=json_printer)
+
+        child_triples = make_triples(child, triple, level+1, child_conj_type, json_printer=json_printer)
+        if child_triples:
+            triples = child_triples + triples
+
+    strs = []
+    for triple in triples:
+        trip_str = unicode(triple)
+        if trip_str:
+            strs.append(trip_str)
+    return strs
 
     #return triples
 
-def parse_chapter(filename, json_printer):
+'''def parse_chapter(filename, json_printer):
     text = open(filename).read().decode('utf8')
-    text = text.replace('\n', '')
+    text = text.replace('\n', ' ')
     doc = nlp(text)
     #print json.dumps(doc)
     #print '-----------------------------'
@@ -145,13 +161,64 @@ def parse_chapter(filename, json_printer):
         if PRINT_TREE:
             print u'\n\n------------------------\n%s (%s : %s)' % (unicode(root), root.dep_.lower(), root.pos_.lower())
 
-        make_triple(sent.root, json_printer=json_printer)
+        make_triples(sent.root, json_printer=json_printer)
 
-    return doc
+    return doc'''
+
+NOPOS = ['PRON', 'CONJ', 'PUNCT']
+NODEP = ['prep', 'det', 'poss', 'mark', 'neg']
+
+def parse_bible(filename):
+    text = open(filename).read().decode('utf8')
+    text = text.replace('\n', ' ')
+    text = text.replace('  ', ' ')
+    json_printer = JsonPrinter()
+    phrases_dict = {}
+
+    doc = nlp(text)
+
+    phrases = []
+
+    for sent in doc.sents:
+        prev_prev_word = None
+        prev_word = None
+
+        for idx, word in enumerate(sent):
+            if word.dep_ not in NODEP and word.pos_ not in NOPOS:
+                phrases.append(unicode(word))
+
+            '''if word.pos_ != 'PUNCT':
+                if prev_prev_word:
+                    phrases.append(unicode(prev_prev_word) + u' ' + unicode(prev_word) + u' ' + unicode(word))
+                elif prev_word:
+                    phrases.append(unicode(prev_word) + u' ' + unicode(word))
+
+                prev_prev_word = prev_word
+                prev_word = word'''
+
+        json_printer.add_sentence()
+        sent_phrases = make_triples(sent.root, json_printer=json_printer)
+        phrases = phrases + sent_phrases
+
+    for phrase in phrases:
+        try:
+            obj = phrases_dict[phrase]
+            obj.count = obj.count + 1
+        except KeyError:
+            phrases_dict[phrase] = {
+                'str': phrase,
+                'count': 1
+            }
+
+    print phrases_dict
+
+    print phrases
+
+parse_bible('data/john-3-16.txt')
 
 ## run
 #parse_chapter('data/bible-tests.txt')
-json_printer = JsonPrinter()
-parse_chapter('data/genesis-1.txt', json_printer)
-print '-----------------------------'
-json_printer.toFile()
+#json_printer = JsonPrinter()
+#parse_chapter('data/genesis-1.txt', json_printer)
+#print '-----------------------------'
+#json_printer.toFile()

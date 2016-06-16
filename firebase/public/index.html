@@ -7,11 +7,24 @@
 </head>
 
 <body ng-controller="BibleCtrl">
-  <nav ng-init="view=1">
-    <button ng-click="view=0" ng-class="{sel:view==0}">Book</button><button ng-click="view=1" ng-class="{sel:view==1}">Chapter</button><button ng-click="view=2" ng-class="{sel:view==2}">Verse</button>
+  <nav ng-init="view=0">
+    <button ng-click="view=0" ng-class="{sel:view==0}">Bible</button>
+    <button ng-click="view=1" ng-class="{sel:view==1}">Division</button>
+    <button ng-click="view=2" ng-class="{sel:view==2}">Book</button>
+    <button ng-click="view=3" ng-class="{sel:view==3}">Chapter</button>
+    <button ng-click="view=4" ng-class="{sel:view==4}">Verse</button>
   </nav>
+
+  <div class="books" ng-show="view==0">
+    <div ng-repeat="division in divisions">
+      <h2>{{division.name}}</h2>
+      <ul>
+        <li ng-repeat="book in division.books">{{book.name}}</li>
+      </ul>
+    </div>
+  </div>
   <div class="widgets" ng-show="selectedWord">
-    <h3>{{selectedWord.word}} ({{calcOccur(selectedWord)}} times)</h3>
+    <h3>{{selectedWord.lemma}} ({{calcOccur(selectedWord)}} times)</h3>
     <ul>
       <li>Lemma: {{selectedWord.lemma}}</li>
       <li>Part of speech: {{selectedWord.pos}}</li>

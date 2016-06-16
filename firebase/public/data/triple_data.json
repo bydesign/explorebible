@@ -1,0 +1,582 @@
+[
+    {
+        "obj": "heavens", 
+        "verb": "created", 
+        "subj": "God"
+    }, 
+    {
+        "obj": "earth", 
+        "verb": "created", 
+        "subj": "God"
+    }, 
+    {
+        "obj": "None", 
+        "verb": "was", 
+        "subj": "earth"
+    }, 
+    {
+        "obj": "None", 
+        "verb": "hovering", 
+        "subj": "Spirit"
+    }, 
+    {
+        "obj": "None", 
+        "verb": "said", 
+        "subj": "God"
+    }, 
+    {
+        "obj": "None", 
+        "verb": "be", 
+        "subj": "None"
+    }, 
+    {
+        "obj": "None", 
+        "verb": "saw", 
+        "subj": "God"
+    }, 
+    {
+        "obj": "good", 
+        "verb": "was", 
+        "subj": "light"
+    }, 
+    {
+        "obj": "light", 
+        "verb": "separated", 
+        "subj": "God"
+    }, 
+    {
+        "obj": "Day", 
+        "verb": "called", 
+        "subj": "God"
+    }, 
+    {
+        "obj": "None", 
+        "verb": "called", 
+        "subj": "he"
+    }, 
+    {
+        "obj": "None", 
+        "verb": "was", 
+        "subj": "None"
+    }, 
+    {
+        "obj": "None", 
+        "verb": "said", 
+        "subj": "God"
+    }, 
+    {
+        "obj": "None", 
+        "verb": "be", 
+        "subj": "None"
+    }, 
+    {
+        "obj": "waters", 
+        "verb": "separate", 
+        "subj": "it"
+    }, 
+    {
+        "obj": "expanse", 
+        "verb": "made", 
+        "subj": "God"
+    }, 
+    {
+        "obj": "waters", 
+        "verb": "None", 
+        "subj": "None"
+    }, 
+    {
+        "obj": "None", 
+        "verb": "were", 
+        "subj": "that"
+    }, 
+    {
+        "obj": "None", 
+        "verb": "were", 
+        "subj": "that"
+    }, 
+    {
+        "obj": "so", 
+        "verb": "was", 
+        "subj": "it"
+    }, 
+    {
+        "obj": "expanse", 
+        "verb": "called", 
+        "subj": "God"
+    }, 
+    {
+        "obj": "None", 
+        "verb": "was", 
+        "subj": "None"
+    }, 
+    {
+        "obj": "None", 
+        "verb": "said", 
+        "subj": "God"
+    }, 
+    {
+        "obj": "None", 
+        "verb": "gathered", 
+        "subj": "None"
+    }, 
+    {
+        "obj": "None", 
+        "verb": "appear", 
+        "subj": "land"
+    }, 
+    {
+        "obj": "None", 
+        "verb": "was", 
+        "subj": "it"
+    }, 
+    {
+        "obj": "Earth", 
+        "verb": "called", 
+        "subj": "God"
+    }, 
+    {
+        "obj": "None", 
+        "verb": "gathered", 
+        "subj": "None"
+    }, 
+    {
+        "obj": "None", 
+        "verb": "called", 
+        "subj": "he"
+    }, 
+    {
+        "obj": "None", 
+        "verb": "saw", 
+        "subj": "God"
+    }, 
+    {
+        "obj": "good", 
+        "verb": "was", 
+        "subj": "it"
+    }, 
+    {
+        "obj": "None", 
+        "verb": "said", 
+        "subj": "God"
+    }, 
+    {
+        "obj": "vegetation", 
+        "verb": "sprout", 
+        "subj": "earth"
+    }, 
+    {
+        "obj": "None", 
+        "verb": "is", 
+        "subj": "plants"
+    }, 
+    {
+        "obj": "trees", 
+        "verb": "None", 
+        "subj": "None"
+    }, 
+    {
+        "obj": "fruit", 
+        "verb": "None", 
+        "subj": "None"
+    }, 
+    {
+        "obj": "so", 
+        "verb": "was", 
+        "subj": "it"
+    }, 
+    {
+        "obj": "vegetation", 
+        "verb": "brought", 
+        "subj": "earth"
+    }, 
+    {
+        "obj": "plants", 
+        "verb": "None", 
+        "subj": "None"
+    }, 
+    {
+        "obj": "seed", 
+        "verb": "None", 
+        "subj": "None"
+    }, 
+    {
+        "obj": "None", 
+        "verb": "None", 
+        "subj": "trees"
+    }, 
+    {
+        "obj": "fruit", 
+        "verb": "None", 
+        "subj": "None"
+    }, 
+    {
+        "obj": "None", 
+        "verb": "saw", 
+        "subj": "God"
+    }, 
+    {
+        "obj": "good", 
+        "verb": "was", 
+        "subj": "it"
+    }, 
+    {
+        "obj": "None", 
+        "verb": "was", 
+        "subj": "None"
+    }, 
+    {
+        "obj": "None", 
+        "verb": "said", 
+        "subj": "God"
+    }, 
+    {
+        "obj": "None", 
+        "verb": "be", 
+        "subj": "None"
+    }, 
+    {
+        "obj": "day", 
+        "verb": "None", 
+        "subj": "None"
+    }, 
+    {
+        "obj": "None", 
+        "verb": "let", 
+        "subj": "None"
+    }, 
+    {
+        "obj": "None", 
+        "verb": "be", 
+        "subj": "them"
+    }, 
+    {
+        "obj": "None", 
+        "verb": "be", 
+        "subj": "them"
+    }, 
+    {
+        "obj": "light", 
+        "verb": "None", 
+        "subj": "None"
+    }, 
+    {
+        "obj": "so", 
+        "verb": "was", 
+        "subj": "it"
+    }, 
+    {
+        "obj": "light", 
+        "verb": "made", 
+        "subj": "God"
+    }, 
+    {
+        "obj": "None", 
+        "verb": "None", 
+        "subj": "lights\u2014the"
+    }, 
+    {
+        "obj": "stars", 
+        "verb": "None", 
+        "subj": "None"
+    }, 
+    {
+        "obj": "them", 
+        "verb": "set", 
+        "subj": "God"
+    }, 
+    {
+        "obj": "light", 
+        "verb": "None", 
+        "subj": "None"
+    }, 
+    {
+        "obj": "light", 
+        "verb": "None", 
+        "subj": "None"
+    }, 
+    {
+        "obj": "None", 
+        "verb": "saw", 
+        "subj": "God"
+    }, 
+    {
+        "obj": "good", 
+        "verb": "was", 
+        "subj": "it"
+    }, 
+    {
+        "obj": "None", 
+        "verb": "was", 
+        "subj": "None"
+    }, 
+    {
+        "obj": "None", 
+        "verb": "was", 
+        "subj": "None"
+    }, 
+    {
+        "obj": "None", 
+        "verb": "said", 
+        "subj": "God"
+    }, 
+    {
+        "obj": "None", 
+        "verb": "swarm", 
+        "subj": "None"
+    }, 
+    {
+        "obj": "None", 
+        "verb": "fly", 
+        "subj": "birds"
+    }, 
+    {
+        "obj": "creatures", 
+        "verb": "created", 
+        "subj": "God"
+    }, 
+    {
+        "obj": "creature", 
+        "verb": "created", 
+        "subj": "God"
+    }, 
+    {
+        "obj": "swarm", 
+        "verb": "created", 
+        "subj": "God"
+    }, 
+    {
+        "obj": "None", 
+        "verb": "moves", 
+        "subj": "that"
+    }, 
+    {
+        "obj": "None", 
+        "verb": "saw", 
+        "subj": "God"
+    }, 
+    {
+        "obj": "good", 
+        "verb": "was", 
+        "subj": "it"
+    }, 
+    {
+        "obj": "them", 
+        "verb": "blessed", 
+        "subj": "God"
+    }, 
+    {
+        "obj": "fruitful", 
+        "verb": "None", 
+        "subj": "None"
+    }, 
+    {
+        "obj": "waters", 
+        "verb": "None", 
+        "subj": "None"
+    }, 
+    {
+        "obj": "None", 
+        "verb": "multiply", 
+        "subj": "birds"
+    }, 
+    {
+        "obj": "None", 
+        "verb": "was", 
+        "subj": "None"
+    }, 
+    {
+        "obj": "None", 
+        "verb": "was", 
+        "subj": "None"
+    }, 
+    {
+        "obj": "None", 
+        "verb": "said", 
+        "subj": "God"
+    }, 
+    {
+        "obj": "creatures", 
+        "verb": "bring", 
+        "subj": "earth"
+    }, 
+    {
+        "obj": "things", 
+        "verb": "None", 
+        "subj": "None"
+    }, 
+    {
+        "obj": "beasts", 
+        "verb": "None", 
+        "subj": "None"
+    }, 
+    {
+        "obj": "None", 
+        "verb": "was", 
+        "subj": "it"
+    }, 
+    {
+        "obj": "beasts", 
+        "verb": "made", 
+        "subj": "God"
+    }, 
+    {
+        "obj": "None", 
+        "verb": "creeps", 
+        "subj": "that"
+    }, 
+    {
+        "obj": "None", 
+        "verb": "saw", 
+        "subj": "God"
+    }, 
+    {
+        "obj": "good", 
+        "verb": "was", 
+        "subj": "it"
+    }, 
+    {
+        "obj": "None", 
+        "verb": "said", 
+        "subj": "God"
+    }, 
+    {
+        "obj": "None", 
+        "verb": "make", 
+        "subj": "us"
+    }, 
+    {
+        "obj": "None", 
+        "verb": "man", 
+        "subj": "None"
+    }, 
+    {
+        "obj": "None", 
+        "verb": "let", 
+        "subj": "None"
+    }, 
+    {
+        "obj": "dominion", 
+        "verb": "have", 
+        "subj": "them"
+    }, 
+    {
+        "obj": "None", 
+        "verb": "creeps", 
+        "subj": "that"
+    }, 
+    {
+        "obj": "them", 
+        "verb": "created", 
+        "subj": "he"
+    }, 
+    {
+        "obj": "man", 
+        "verb": "created", 
+        "subj": "God"
+    }, 
+    {
+        "obj": "him", 
+        "verb": "created", 
+        "subj": "he"
+    }, 
+    {
+        "obj": "them", 
+        "verb": "blessed", 
+        "subj": "God"
+    }, 
+    {
+        "obj": "None", 
+        "verb": "said", 
+        "subj": "God"
+    }, 
+    {
+        "obj": "fruitful", 
+        "verb": "None", 
+        "subj": "None"
+    }, 
+    {
+        "obj": "earth", 
+        "verb": "None", 
+        "subj": "None"
+    }, 
+    {
+        "obj": "it", 
+        "verb": "None", 
+        "subj": "None"
+    }, 
+    {
+        "obj": "dominion", 
+        "verb": "None", 
+        "subj": "None"
+    }, 
+    {
+        "obj": "None", 
+        "verb": "moves", 
+        "subj": "that"
+    }, 
+    {
+        "obj": "None", 
+        "verb": "said", 
+        "subj": "God"
+    }, 
+    {
+        "obj": "tree", 
+        "verb": "given", 
+        "subj": "I"
+    }, 
+    {
+        "obj": "seed", 
+        "verb": "None", 
+        "subj": "None"
+    }, 
+    {
+        "obj": "None", 
+        "verb": "is", 
+        "subj": "that"
+    }, 
+    {
+        "obj": "them", 
+        "verb": "have", 
+        "subj": "You"
+    }, 
+    {
+        "obj": "plant", 
+        "verb": "given", 
+        "subj": "I"
+    }, 
+    {
+        "obj": "None", 
+        "verb": "creeps", 
+        "subj": "that"
+    }, 
+    {
+        "obj": "breath", 
+        "verb": "has", 
+        "subj": "that"
+    }, 
+    {
+        "obj": "None", 
+        "verb": "was", 
+        "subj": "it"
+    }, 
+    {
+        "obj": "everything", 
+        "verb": "saw", 
+        "subj": "God"
+    }, 
+    {
+        "obj": "that", 
+        "verb": "made", 
+        "subj": "he"
+    }, 
+    {
+        "obj": "good", 
+        "verb": "None", 
+        "subj": "it"
+    }, 
+    {
+        "obj": "None", 
+        "verb": "was", 
+        "subj": "None"
+    }
+]
