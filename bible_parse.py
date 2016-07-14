@@ -1,10 +1,10 @@
-import spacy
-import json
-nlp = spacy.load('en')
+import json, re, urllib, spacy
+from firebase import Firebase
+from slugify import slugify
 
 ### SETTINGS ###
 PRINT_TREE = False
-PRINT_JSON = False
+PRINT_JSON = True
 PRINT_TRIPLES = False
 
 # class to store and manipulate triple data
@@ -17,12 +17,31 @@ class Triple():
 
     def __unicode__(self):
         if self.is_populated():
-            return '%s %s %s' % (self.subj, self.verb, self.obj)
+            subj = ''
+            if self.subj:
+                subj = self.subj.lemma_
+            verb = ''
+            if self.verb:
+                verb = self.verb.lemma_
+            obj = ''
+            if self.obj:
+                obj = self.obj.lemma_
+            return '%s %s %s' % (subj, verb, obj)
         else:
             return ''
 
     def is_populated(self):
-        return bool(self.subj or self.verb or self.obj)
+        count = 0
+        if self.subj:
+            count = count + 1
+        if self.subj:
+            count = count + 1
+        if self.subj:
+            count = count + 1
+
+        print count
+        return count >= 2
+        #return bool(self.subj and self.verb and self.obj)
 
     def __str__(self):
         return self.__unicode__()
@@ -136,6 +155,7 @@ def make_triples(token, parent_triple=None, level=0, conj_type=None, json_printe
 
     strs = []
     for triple in triples:
+        print triple
         trip_str = unicode(triple)
         if trip_str:
             strs.append(trip_str)
@@ -175,6 +195,8 @@ def parse_bible(filename):
     json_printer = JsonPrinter()
     phrases_dict = {}
 
+    nlp = spacy.load('en')
+
     doc = nlp(text)
 
     phrases = []
@@ -198,6 +220,7 @@ def parse_bible(filename):
 
         json_printer.add_sentence()
         sent_phrases = make_triples(sent.root, json_printer=json_printer)
+        print sent_phrases
         phrases = phrases + sent_phrases
 
     for phrase in phrases:
@@ -210,11 +233,121 @@ def parse_bible(filename):
                 'count': 1
             }
 
-    print phrases_dict
+        print phrase
 
-    print phrases
+    #print phrases_dict
 
-parse_bible('data/john-3-16.txt')
+    #print phrases
+
+#parse_bible('data/john-3-16.txt')
+
+def striphtml(data):
+    p = re.compile(r'<.*?>')
+    return p.sub('', data)
+
+p = re.compile(r'<.*?>')
+q = re.compile(r'([,.:])(?![\s])')
+def fixtxt(data):
+    data = data.replace('  ', ' ')
+    data = p.sub('', data)
+    #data = q.sub(r'\1 ', data)
+    return data
+
+def download_bible(bookname, chapter_count):
+    book_json = []
+
+    # load book chapters
+    for ch in range(chapter_count):
+        url = 'http://labs.bible.org/api/?passage='+bookname+'%20'+str(ch+1)+'&type=json'
+        response = urllib.urlopen(url)
+        book_json += json.loads(response.read())
+        book_parts = []
+        for verse in book_json:
+            book_parts.append(verse['text'])
+
+        bookstr = ' '.join(book_parts)
+
+        bookstr = fixtxt(bookstr)
+        nlp = spacy.load('en')
+        doc = nlp(bookstr)
+
+        words = []
+        for sent in doc.sents:
+            prev_prev_word = None
+            prev_word = None
+
+            for word in sent:
+                words.append(unicode(word))
+                #print word
+
+        verse_positions = []
+        token_first = 0
+        token_last = 0
+        tokens = []
+        for verse in book_json:
+            token_first = len(tokens)
+            token = ''
+            for char in fixtxt(verse['text']):
+                if char.isalnum():
+                    token += char
+                else:
+                    if token:
+                        tokens.append(token)
+                        #print token
+                    token = ''
+                    if not char.isspace():
+                        tokens.append(char)
+                        #print char
+
+            token_last = len(tokens)
+            verse_id = 'en/net/%s/%s/%s' % (slugify(verse['bookname']), verse['chapter'], verse['verse'])
+            verse_name = '%s %s:%s' % (verse['bookname'], verse['chapter'], verse['verse'])
+            span = doc[token_first : token_last]
+            verse_positions.append({
+                'id': verse_id,
+                'span': span,
+                'name': verse_name
+            })
+
+        for v in verse_positions:
+            vdict = {
+                'name': v['name'],
+                'tokens': []
+            }
+            tokens = vdict['tokens']
+            for word in v['span']:
+                tokens.append({
+                    'text': unicode(word),
+                    'lemma': word.lemma_,
+                    'dep': word.dep_,
+                    'pos': word.pos_,
+                    'isTitle': word.is_title,
+                    'isPunct': word.is_punct,
+                    'tag': word.tag_,
+                    'textWithWs': word.text_with_ws,
+                    'whitespace': word.whitespace_
+                })
+            vdict['length'] = len(tokens)
+
+            f = Firebase('https://project-6084703088352496772.firebaseio.com/' + v['id'])
+            f.put(vdict)
+            print vdict['name']
+            #print json.dumps(vdict)
+        #span.label = verse_id
+        #print span
+
+        #for i, word in enumerate(words):
+        #    print word + u' : ' + unicode(tokens[i])
+
+        #print tokens
+
+        #print tokens
+
+
+
+    #print book_json
+
+download_bible('Matthew', 1)
 
 ## run
 #parse_chapter('data/bible-tests.txt')
