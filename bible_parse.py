@@ -1,6 +1,7 @@
 import json, re, urllib, spacy
 from firebase import Firebase
 from slugify import slugify
+import os.path
 
 ### SETTINGS ###
 PRINT_TREE = False
@@ -161,30 +162,6 @@ def make_triples(token, parent_triple=None, level=0, conj_type=None, json_printe
             strs.append(trip_str)
     return strs
 
-    #return triples
-
-'''def parse_chapter(filename, json_printer):
-    text = open(filename).read().decode('utf8')
-    text = text.replace('\n', ' ')
-    doc = nlp(text)
-    #print json.dumps(doc)
-    #print '-----------------------------'
-    triples = []
-
-    for sent in doc.sents:
-        root = sent.root
-        json_printer.add_sentence()
-
-        for token in sent:
-            json_printer.add_word(token)
-
-        if PRINT_TREE:
-            print u'\n\n------------------------\n%s (%s : %s)' % (unicode(root), root.dep_.lower(), root.pos_.lower())
-
-        make_triples(sent.root, json_printer=json_printer)
-
-    return doc'''
-
 NOPOS = ['PRON', 'CONJ', 'PUNCT']
 NODEP = ['prep', 'det', 'poss', 'mark', 'neg']
 
@@ -208,15 +185,6 @@ def parse_bible(filename):
         for idx, word in enumerate(sent):
             if word.dep_ not in NODEP and word.pos_ not in NOPOS:
                 phrases.append(unicode(word))
-
-            '''if word.pos_ != 'PUNCT':
-                if prev_prev_word:
-                    phrases.append(unicode(prev_prev_word) + u' ' + unicode(prev_word) + u' ' + unicode(word))
-                elif prev_word:
-                    phrases.append(unicode(prev_word) + u' ' + unicode(word))
-
-                prev_prev_word = prev_word
-                prev_word = word'''
 
         json_printer.add_sentence()
         sent_phrases = make_triples(sent.root, json_printer=json_printer)
@@ -253,14 +221,87 @@ def fixtxt(data):
     #data = q.sub(r'\1 ', data)
     return data
 
-def download_bible(bookname, chapter_count):
+SEARCH_DICT = {}
+SEARCH_LIST = []
+PHRASE_DICT = {}
+PHRASE_LIST = []
+def add_phrase(phrase, verse):
+    vobj = {
+        'id': verse['name'],
+        #'text': verse['span'].text,
+        'name': verse['name']
+    }
+    if phrase not in PHRASE_DICT:
+        obj = {
+            'text': phrase,
+            'count': 1,
+            'verses': [vobj]
+        }
+        PHRASE_DICT[phrase] = obj
+        PHRASE_LIST.append(obj)
+
+        sobj = {
+            'text': phrase,
+            'count': 1
+        }
+        SEARCH_DICT[phrase] = sobj
+        SEARCH_LIST.append(sobj)
+
+    else:
+        obj = PHRASE_DICT[phrase]
+        obj['count'] += 1
+        obj['verses'].append(vobj)
+        SEARCH_DICT[phrase]['count'] += 1
+
+def save_file(path, content):
+    jsonfile = open(path, 'w')
+    jsonfile.write(content)
+    jsonfile.close()
+    print 'saved file '+path
+
+def download_chapter(bookname, chapter):
+    filename = '%s %d' % (bookname, chapter)
+    print filename
+    path = 'firebase/public/data/net/'+ filename +'.json'
+    response = ''
+    print path
+    if os.path.isfile(path):
+        response = open(path).read()
+        print 'found file '+path
+
+    else:
+        url = 'http://labs.bible.org/api/?passage='+ filename +'&type=json'
+        response = urllib.urlopen(url).read()
+        save_file(path, response)
+
+    return json.loads(response)
+
+def save_list(l, url, path):
+    print 'saving %d phrases ...' % len(l)
+    f = Firebase(url)
+    f.delete()
+    phrasedict = {}
+    printphrases = []
+    for i, s in enumerate(l):
+        key = slugify(s['text'])
+        if key:
+            phrasedict[key] = s
+            f.push(s)
+            printphrases.append(key)
+        if i % 20 == 0:
+            print ', '.join(printphrases)
+            printphrases = []
+    save_file(path, json.dumps(phrasedict))
+    print 'Saved %d phrases ...' % len(l)
+
+
+def download_book(bookname, chapter_count, start_chapter=1):
     book_json = []
 
     # load book chapters
     for ch in range(chapter_count):
-        url = 'http://labs.bible.org/api/?passage='+bookname+'%20'+str(ch+1)+'&type=json'
-        response = urllib.urlopen(url)
-        book_json += json.loads(response.read())
+        chnum = ch + start_chapter
+        book_json += download_chapter(bookname, chnum)
         book_parts = []
         for verse in book_json:
             book_parts.append(verse['text'])
@@ -293,11 +334,9 @@ def download_bible(bookname, chapter_count):
                 else:
                     if token:
                         tokens.append(token)
-                        #print token
                     token = ''
                     if not char.isspace():
                         tokens.append(char)
-                        #print char
 
             token_last = len(tokens)
             verse_id = 'en/net/%s/%s/%s' % (slugify(verse['bookname']), verse['chapter'], verse['verse'])
@@ -309,14 +348,19 @@ def download_bible(bookname, chapter_count):
                 'name': verse_name
             })
 
+        chapdict = {
+            'name': '%s %s' % (bookname, chnum),
+            'verses': []
+        }
         for v in verse_positions:
             vdict = {
                 'name': v['name'],
                 'tokens': []
             }
+            chapdict['verses'].append(vdict)
             tokens = vdict['tokens']
             for word in v['span']:
-                tokens.append({
+                token = {
                     'text': unicode(word),
                     'lemma': word.lemma_,
                     'dep': word.dep_,
@@ -326,32 +370,43 @@ def download_bible(bookname, chapter_count):
                     'tag': word.tag_,
                     'textWithWs': word.text_with_ws,
                     'whitespace': word.whitespace_
-                })
+                }
+                tokens.append(token)
+
+                if word.dep_ not in NODEP and word.pos_ not in NOPOS:
+                    add_phrase(word.lemma_, v)
+
             vdict['length'] = len(tokens)
 
-            f = Firebase('https://project-6084703088352496772.firebaseio.com/' + v['id'])
-            f.put(vdict)
-            print vdict['name']
-            #print json.dumps(vdict)
-        #span.label = verse_id
-        #print span
+        chapid = 'en/net/%s/%s' % (slugify(bookname), chnum)
+        f = Firebase('https://project-6084703088352496772.firebaseio.com/' + chapid)
+        f.put(chapdict)
+        print 'Saving %s ...' % chapid
 
-        #for i, word in enumerate(words):
-        #    print word + u' : ' + unicode(tokens[i])
+    searchdict = {}
+    for s in SEARCH_LIST:
+        key = slugify(s['text'])
+        if key:
+            searchdict[key] = s
 
-        #print tokens
+    save_file('firebase/public/data/search/search_terms.json', json.dumps(searchdict))
+    print 'Saving %d search terms ...' % len(SEARCH_LIST)
+    f = Firebase('https://project-6084703088352496772.firebaseio.com/search/')
+    f.put(searchdict)
 
-        #print tokens
+    url = 'https://project-6084703088352496772.firebaseio.com/phrases/'
+    path = 'firebase/public/data/search/search_phrases.json'
+    save_list(PHRASE_LIST, url, path)
+
+
+download_book('Matthew', 3, 1)
 
 
 
-    #print book_json
+def upload_divisions():
+    books_file = open('firebase/public/data/books.json')
+    divs = json.load(books_file)
+    f = Firebase('https://project-6084703088352496772.firebaseio.com/books/en/')
+    f.put(divs)
 
-download_bible('Matthew', 1)
-
-## run
-#parse_chapter('data/bible-tests.txt')
-#json_printer = JsonPrinter()
-#parse_chapter('data/genesis-1.txt', json_printer)
-#print '-----------------------------'
-#json_printer.toFile()
+#upload_divisions()
