@@ -259,20 +259,12 @@ def save_file(path, content):
     jsonfile.close()
     print 'saved file '+path
 
-def download_chapter(bookname, chapter):
+def get_chapter(bookname, chapter):
     filename = '%s %d' % (bookname, chapter)
     print filename
     path = 'firebase/public/data/net/'+ filename +'.json'
-    response = ''
-    print path
-    if os.path.isfile(path):
-        response = open(path).read()
-        print 'found file '+path
-
-    else:
-        url = 'http://labs.bible.org/api/?passage='+ filename +'&type=json'
-        response = urllib.urlopen(url).read()
-        save_file(path, response)
+    response = open(path).read()
+    print 'found file '+path
 
     return json.loads(response)
 
@@ -301,7 +293,7 @@ def download_book(bookname, chapter_count, start_chapter=1):
     # load book chapters
     for ch in range(chapter_count):
         chnum = ch + start_chapter
-        book_json += download_chapter(bookname, chnum)
+        book_json += get_chapter(bookname, chnum)
         book_parts = []
         for verse in book_json:
             book_parts.append(verse['text'])

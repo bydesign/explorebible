@@ -16,10 +16,13 @@
   </nav>
 
   <div class="books" ng-show="view==0">
-    <div ng-repeat="division in divisions">
+    <div ng-repeat="division in bible">
       <h2>{{division.name}}</h2>
       <ul>
-        <li ng-repeat="book in division.books">{{book.name}}</li>
+        <li ng-repeat="book in division.books">
+          <h3>{{book.name}}</h3>
+          <p class="chboxes"><span ng-repeat="t in getTimes(book.count) track by $index">{{$index+1}}</span></p>
+        </li>
       </ul>
     </div>
   </div>

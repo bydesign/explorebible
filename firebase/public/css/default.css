@@ -67,3 +67,16 @@ button:focus {
 button.sel {
   background-color:#ccc;
 }
+.chboxes > span {
+  clear:left;
+  display:block;
+  background-color:#ccc;
+  border-bottom:solid 1px #ddd;
+  color:#eee;
+  font-size:.8em;
+  height:2px;
+  text-align: center;
+}
+.chboxes > span:hover {
+  background-color:#aaa;
+}
