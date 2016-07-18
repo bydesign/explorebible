@@ -67,16 +67,165 @@ button:focus {
 button.sel {
   background-color:#ccc;
 }
-.chboxes > span {
+.toc {
+  max-width:900px;
+  margin: 0 auto;
+  padding: 1em 5em;
+}
+.book, .chrow, .books, .chapters {
+  margin:0;
+  padding:0;
+  list-style:none;
+}
+.division > h2 {
+  border-bottom: solid 1px #ddd;
+}
+.bookHeader {
+  transition: all 1s ease-in-out;
+}
+.divHeader, .view1 .bookHeader, .view2 .bookHeader {
+  font-size:2em;
+  text-align: center;
+  font-weight:100;
+  padding: .25em 1em .25em;
+  margin:0;
+}
+.divHeader {
+  width:8em;
+  margin: 0 auto;
+  padding: .25em;
+  box-sizing: border-box;
+}
+.view1 .bookHeader {
+  border-bottom:none;
+}
+.div-icon {
+  display:block;
+  border-radius:100%;
+  background-color:rgb(175,50,50);
+  width:1.5em;
+  height:1.5em;
+  margin: 0 auto;
+}
+.books {
+  margin-top:1em;
+}
+.boxHover {
+  transition: all .3s ease-in-out;
+}
+.boxHover:hover {
+  box-shadow: 0 0 10px rgba(0,0,0,.2);
+}
+.view2 .book:hover {
+  box-shadow: none;
+}
+.view1 .division, .view2 .book {
+  display:none;
+}
+.view1 .division.sel, .view2 .book.sel {
+  display:block;
+}
+.book {
+  position:relative;
+  margin-bottom:.25em;
+  padding:.5em;
+  overflow:hidden;
+}
+.book > h3 {
+  margin:0;
+  margin-bottom:.2em;
+  font-weight:normal;
+}
+.chrow {
   clear:left;
   display:block;
-  background-color:#ccc;
-  border-bottom:solid 1px #ddd;
   color:#eee;
   font-size:.8em;
-  height:2px;
-  text-align: center;
 }
-.chboxes > span:hover {
+.chbox {
+  background-color:#ccc;
+  display:block;
+  height:2px;
+  border-bottom:solid 1px #ddd;
+  transition: height .3s ease-in-out;
+  text-indent:-1000em;
+}
+.chnum {
+    transition: all 2s ease-in-out;
+}
+.chrow:hover > .chbox {
   background-color:#aaa;
+}
+.view1 .chbox, .view2 .chbox, .view0 .chnum {
+  display:none;
+}
+.view1 .chnum {
+  float:left;
+  color:#000;
+  margin-bottom:.2em;
+  font-weight:normal;
+  width:3em;
+  padding: 0 .5em;
+  text-align: right;
+  box-sizing: border-box;
+  font-size: 1em;
+  line-height: 1em;
+  padding-bottom: .2em;
+}
+.verseList {
+  display:block;
+  margin-left:3em;
+  border-bottom:solid 1px #fff;
+  min-height: 1em;
+}
+.view0 .verseList {
+  display:none;
+}
+.verseList > div {
+  background-color:rgba(0,0,0,.2);
+  height:1px;
+  text-indent:-1000em;
+  transition: all 2s ease-in-out;
+}
+.view2 .verseList > div {
+  background-color: rgba(0,0,0,.1);
+  height:5px;
+  border-bottom:solid 1px #fff;
+}
+.view2 .chnum {
+  float: left;
+  color: #bbb;
+  font-size: 2.5em;
+  width: .8em;
+  text-align: right;
+  font-weight: 100;
+  line-height: 1.5em;
+}
+.view2 .verseList > .isTitle {
+  background-color:transparent !important;
+  height:auto;
+  border:none;
+  text-indent:0;
+  color:#000;
+  font-size:1.2em;
+  margin-top:.5em;
+  margin-bottom:.25em;
+}
+.view1 .chrow:nth-child(odd) > .verseList > div {
+  background-color:rgba(0,0,0,.3);
+}
+.view1 .isTitle {
+  display:none;
+}
+.view1 .chrow:hover {
+  background-color:rgba(0,0,0,.05);
+}
+.view2 .chrow {
+  padding:1em;
+}
+.view1 .chrow {
+  transition:none;
+}
+.view1 .chrow:hover {
+  box-shadow: none;
 }

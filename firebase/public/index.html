@@ -15,13 +15,21 @@
     <button ng-click="view=4" ng-class="{sel:view==4}">Verse</button>
   </nav>
 
-  <div class="books" ng-show="view==0">
-    <div ng-repeat="division in bible">
-      <h2>{{division.name}}</h2>
-      <ul>
-        <li ng-repeat="book in division.books">
-          <h3>{{book.name}}</h3>
-          <p class="chboxes"><span ng-repeat="t in getTimes(book.count) track by $index">{{$index+1}}</span></p>
+  <div class="toc" ng-show="view<=1" ng-class="{view0:view==0, view1:view==1, view2:view==2}">
+    <div ng-repeat="division in bible" class="division" ng-class="{sel:curDiv==division}">
+      <h2 ng-show="view<=1">
+        <div class="divHeader boxHover" ng-click="selectDivision(division)"><span class="div-icon"></span>{{division.name}}</div>
+      </h2>
+      <ul class="books">
+        <li ng-repeat="book in division.books" class="book boxHover" ng-click="selectBook(book, division)" ng-class="{sel:curBook==book}">
+          <h3 ng-init="book.hoverName=book.name" class="bookHeader">{{book.hoverName}}</h3>
+          <ul class="chapters">
+            <li ng-repeat="ch in book.chs" class="chrow boxHover" ng-click="selectChapter(ch, book, division)">
+              <span ng-style="{width:15+ch.ct.length+'%'}" class="chbox"></span>
+              <span class="chnum">{{ch.num}}</span>
+              <div class="verseList"><div ng-repeat="v in ch.ct track by $index" ng-style="{width:40+v+'%'}" ng-bind-html="v" ng-class="{isTitle:isStr(v)}"></div></div>
+            </li>
+          </ul>
         </li>
       </ul>
     </div>
@@ -30,17 +38,23 @@
     <h3>{{selectedWord.lemma}} ({{calcOccur(selectedWord)}} times)</h3>
     <ul>
       <li>Lemma: {{selectedWord.lemma}}</li>
-      <li>Part of speech: {{selectedWord.pos}}</li>
+      <li>Part of speech: {{selectedWord.s}}</li>
       <li>Dep: {{selectedWord.dep}}</li>
       <li>Tag: {{selectedWord.tag}}</li>
     </ul>
   </div>
-  <div class="textDisplay" ng-class="{viewBook:view==0, viewChap:view==1, viewVerse:view==2, }">
-    <h1>Genesis One</h1>
-    <p ng-repeat="sent in sents" ng-class="{sel:sent==selectedSent}"><span ng-repeat="word in sent.words" ng-click="selectWord(word, sent)" ng-class="{sel:selectedWord==word, sim:selectedWord.lemma==word.lemma}"><span ng-class="{w:!word.isPunct}">{{word.word}}</span>{{word.whitespace}}</span></p>
+  <div class="textDisplay" ng-class="{viewBook:view==2, viewChap:view==3, viewVerse:view==4, }" ng-show="view>=2">
+    <h1>{{curBook.name}}</h1>
+    <div class="chapter" ng-repeat="ch in chapters">
+      <h2 class="chapterName">{{ch.name}}</h2>
+      <span ng-repeat="verse in ch.verses" ng-class="{sel:sent==selectedSent}"><span class="verseNum">{{verse.num}}</span>
+        <span ng-repeat="word in verse.t" ng-click="selectWord(word, verse)" ng-class="{sel:selectedWord==word, sim:selectedWord.l==word.l}"><span ng-class="{w:!word.p}">{{word.t}}</span>{{word.w}}</span>
+      </span>
+    </div>
   </div>
 <!-- AngularJS -->
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-sanitize.js"></script>
 
 <!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/3.0.3/firebase.js"></script>

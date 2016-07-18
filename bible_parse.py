@@ -3,6 +3,8 @@ from firebase import Firebase
 from slugify import slugify
 import os.path
 
+nlp = spacy.load('en')
+
 ### SETTINGS ###
 PRINT_TREE = False
 PRINT_JSON = True
@@ -293,7 +295,7 @@ def download_book(bookname, chapter_count, start_chapter=1):
     # load book chapters
     for ch in range(chapter_count):
         chnum = ch + start_chapter
-        book_json += get_chapter(bookname, chnum)
+        book_json = get_chapter(bookname, chnum)
         book_parts = []
         for verse in book_json:
             book_parts.append(verse['text'])
@@ -301,7 +303,6 @@ def download_book(bookname, chapter_count, start_chapter=1):
         bookstr = ' '.join(book_parts)
 
         bookstr = fixtxt(bookstr)
-        nlp = spacy.load('en')
         doc = nlp(bookstr)
 
         words = []
@@ -337,7 +338,8 @@ def download_book(bookname, chapter_count, start_chapter=1):
             verse_positions.append({
                 'id': verse_id,
                 'span': span,
-                'name': verse_name
+                'name': verse_name,
+                'num': verse['verse']
             })
 
         chapdict = {
@@ -346,33 +348,42 @@ def download_book(bookname, chapter_count, start_chapter=1):
         }
         for v in verse_positions:
             vdict = {
-                'name': v['name'],
-                'tokens': []
+                'n': v['num'],
+                't': []
             }
             chapdict['verses'].append(vdict)
-            tokens = vdict['tokens']
+            tokens = vdict['t']
             for word in v['span']:
                 token = {
-                    'text': unicode(word),
-                    'lemma': word.lemma_,
-                    'dep': word.dep_,
-                    'pos': word.pos_,
-                    'isTitle': word.is_title,
-                    'isPunct': word.is_punct,
-                    'tag': word.tag_,
-                    'textWithWs': word.text_with_ws,
-                    'whitespace': word.whitespace_
+                    't': unicode(word)   # word text
                 }
+                if word.is_punct:
+                    token['p'] = word.is_punct # is punctuation
+
+                if not word.is_punct:
+                    if unicode(word) != word.lemma_:
+                        token['l'] = word.lemma_        # lemma root word
+                    if word.is_title:
+                        token['h'] = word.is_title # is title / heading
+                    if word.whitespace_ == ' ':
+                        token['w'] = word.whitespace_   # whitespace
+                    token['s'] = word.pos          # part of speech
+                    #token['d'] = word.dep_          # dep
+                    #token['g'] = word.tag_,         # tag
+                    #token['tw'] = word.text_with_ws,    # text with whitespace
+
                 tokens.append(token)
 
                 if word.dep_ not in NODEP and word.pos_ not in NOPOS:
                     add_phrase(word.lemma_, v)
 
-            vdict['length'] = len(tokens)
+            #vdict['length'] = len(tokens)
 
         chapid = 'en/net/%s/%s' % (slugify(bookname), chnum)
         f = Firebase('https://project-6084703088352496772.firebaseio.com/' + chapid)
         f.put(chapdict)
+        path = 'firebase/public/data/net_parsed/%s-%d.json' % (slugify(bookname), chnum)
+        save_file(path, json.dumps(chapdict, separators=(',', ':')))
         print 'Saving %s ...' % chapid
 
     searchdict = {}
@@ -381,17 +392,17 @@ def download_book(bookname, chapter_count, start_chapter=1):
         if key:
             searchdict[key] = s
 
-    save_file('firebase/public/data/search/search_terms.json', json.dumps(searchdict))
-    print 'Saving %d search terms ...' % len(SEARCH_LIST)
-    f = Firebase('https://project-6084703088352496772.firebaseio.com/search/')
-    f.put(searchdict)
+    #save_file('firebase/public/data/search/search_terms.json', json.dumps(searchdict))
+    #print 'Saving %d search terms ...' % len(SEARCH_LIST)
+    #f = Firebase('https://project-6084703088352496772.firebaseio.com/search/')
+    #f.put(searchdict)
 
-    url = 'https://project-6084703088352496772.firebaseio.com/phrases/'
-    path = 'firebase/public/data/search/search_phrases.json'
-    save_list(PHRASE_LIST, url, path)
+    #url = 'https://project-6084703088352496772.firebaseio.com/phrases/'
+    #path = 'firebase/public/data/search/search_phrases.json'
+    #save_list(PHRASE_LIST, url, path)
 
 
-download_book('Matthew', 3, 1)
+download_book('Matthew', 28, 1)
 
 
 
