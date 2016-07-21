@@ -339,7 +339,8 @@ def download_book(bookname, chapter_count, start_chapter=1):
                 'id': verse_id,
                 'span': span,
                 'name': verse_name,
-                'num': verse['verse']
+                'num': verse['verse'],
+                'pretitle': verse['title']
             })
 
         chapdict = {

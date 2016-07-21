@@ -1,0 +1,11 @@
+<template>
+  <h1>ThreadBible</h1>
+  <p>Divisions count: ${divisions.length}</p>
+  <p>Another paragraph for ${stuff}.</p>
+  <div repeat.for="div of divisions">
+    <h2>${div.name}</h2>
+    <ul>
+      <li repeat.for="book of div.books">${book.name}</li>
+    </ul>
+  </div>
+</template>
