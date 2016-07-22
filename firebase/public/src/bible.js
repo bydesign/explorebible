@@ -7,14 +7,13 @@ export class Bible {
 
   constructor(bibledata) {
     var that = this;
-    bibledata.books.then(response => response.json()).then(function(data) {
+    bibledata.books.then(function(data) {
       that.divisions = data;
-      console.log(data);
     });
   }
 
   attached() {
-    console.log('attached to view');
-    console.log(this.divisions);
+    //console.log('attached to view');
+    //console.log(this.divisions);
   }
 }

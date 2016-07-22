@@ -14,6 +14,22 @@ export class BibleData {
   }
 
   get books() {
-    return this.http.fetch('books/en.json');
+    var that = this;
+    var p = {};
+    if (this._books == undefined) {
+      p = new Promise(function(resolve, reject) {
+        that.http.fetch('books/en.json').then(response => response.json()).then(function(data) {
+          that._books = data;
+          resolve(data);
+        });
+      });
+
+    } else {
+      p = new Promise(function(resolve, reject) {
+        resolve(that._books);
+      });
+    }
+
+    return p;
   }
 }
