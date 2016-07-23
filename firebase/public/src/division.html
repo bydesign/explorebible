@@ -1,4 +1,24 @@
 <template>
   <h1>Division View</h1>
   <p>${heading}</p>
+
+  <div class="toc view0">
+    <div repeat.for="div of divisions" class="division">
+      <h2>
+        <div class="divHeader boxHover"><span class="div-icon"></span>${div.name}</div>
+      </h2>
+      <ul class="books">
+        <li repeat.for="book of div.books" class="book boxHover">
+          <h3 class="bookHeader">${book.hoverName}</h3>
+          <ul class="chapters">
+            <li repeat.for="ch of book.c" class="chrow boxHover">
+              <span style="${'width:'+(15+ch.c.length)+'%'}" class="chbox"></span>
+              <span class="chnum">${ch.n}</span>
+              <div class="verseList"><div repeat.for="v of ch.ct" style="${'width:'+(40+v)+'%'}" innerhtml.bind="v" class="${isStr(v) ? 'isTitle' : ''}"></div></div>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
 </template>

@@ -1,5 +1,6 @@
 <template>
   <ul class="nav navbar-nav">
+    <li><h1>ThreadBible</h1></li>
     <li repeat.for="row of router.navigation" class="${row.isActive ? 'active' : ''}">
       <a href.bind="row.href">${row.title}</a>
     </li>
@@ -10,8 +11,7 @@
       <i class="fa fa-spinner fa-spin fa-2x"></i>
     </li>
   </ul>
-  
-  <h1>${message}</h1>
+
   <div class="page-host">
     <router-view></router-view>
   </div>

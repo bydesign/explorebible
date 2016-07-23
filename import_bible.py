@@ -34,10 +34,10 @@ def upload_chapters():
     bible = json.loads(biblefile)
     for div in bible:
         for book in div['books']:
-            bookname = book['name']
+            bookname = book['n']
             chapters = []
 
-            for chap in range(book['ct']):
+            for chap in range(book['c']):
                 chnum = chap + 1
                 name = '%s %d' % (bookname, chnum)
                 print '--------------\nGetting ' + name
@@ -52,14 +52,11 @@ def upload_chapters():
 
                 print wordcounts
                 chapters.append({
-                    'num': chnum,
-                    'ct': wordcounts
+                    'n': chnum,
+                    'c': wordcounts
                 })
 
-            book['chs'] = chapters
-
-            if 'chapters' in book:
-                del book['chapters']
+            book['c'] = chapters
 
     save_file(filename, json.dumps(bible, indent=4))
 
@@ -79,4 +76,4 @@ def upload_books():
     print 'saved books'
 
 upload_chapters()
-upload_books()
+#upload_books()
