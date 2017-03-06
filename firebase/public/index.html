@@ -31,7 +31,7 @@
   </div>
 </div>
 
-<div class="zoomedOut text" v-if="menuVisible">
+<div class="zoomedOut text" v-if="menuVisible" v-scroll="onScroll">
   <h1>{{ curBookContents.n }}</h1>
   <div class="zoomChap chap" v-if="curBookContents != undefined" v-for="(chapter, chnum) in curBookContents.c">
     <span class="zoomChnum chnum">{{ chnum+1 }}</span>

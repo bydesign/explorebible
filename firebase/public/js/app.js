@@ -9,6 +9,15 @@ var app = new Vue({
     menuVisible: false,
     curBookContents: {}
   },
+  directives: {
+    scroll: {
+      bind: function(el, binding) {
+        el.addEventListener('scroll',function(e){
+          binding.value(e, { scrollTop: el.scrollTop, scrollLeft: el.scrollLeft});
+        });
+      }
+    }
+  },
 
   methods: {
     selectWord: function(word) {
@@ -37,6 +46,11 @@ var app = new Vue({
 
     isInteger: function(val) {
       return (typeof val==='number' && (val%1)===0);
+    },
+
+    onScroll:function(e, position){
+      this.position = position;
+      console.log(position);
     }
   },
 
@@ -64,6 +78,11 @@ var app = new Vue({
       console.log(data.val());
       that.book = data.val();
     });
+
+    var el = document.querySelector('zoomChap span');
+    console.log(el);
+    var rect = el.getBoundingClientRect();
+    console.log(rect);
 
   }
 })
