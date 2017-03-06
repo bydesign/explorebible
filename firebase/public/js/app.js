@@ -31,9 +31,7 @@ var app = new Vue({
           width: 60 + length * 40 + '%'
         };
       } else {
-        return {
-          width: 60 + wordCount.split(' ').length + '%'
-        };
+        return {};
       }
     },
 

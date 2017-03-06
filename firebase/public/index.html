@@ -35,7 +35,7 @@
   <h1>{{ curBookContents.n }}</h1>
   <div class="zoomChap chap" v-if="curBookContents != undefined" v-for="(chapter, chnum) in curBookContents.c">
     <span class="zoomChnum chnum">{{ chnum+1 }}</span>
-    <span class="zoomVerse verse" v-bind:class="{isHeader: !isInteger(verse)}" v-bind:style="verseWidth(verse)" v-for="verse in chapter.c" ></span>
+    <span class="zoomVerse verse" v-bind:class="{isHeader: !isInteger(verse)}" v-bind:style="verseWidth(verse)" v-for="verse in chapter.c" v-html="verse"></span>
   </div>
 </div>
 
@@ -44,8 +44,8 @@
 </div>
 
 <button class="dragBtn">
-  <i class="material-icons">arrow_drop_down</i>
-  <i class="material-icons">arrow_drop_up</i>
+  <i class="material-icons arrowUp">arrow_drop_up</i>
+  <i class="material-icons arrowDown">arrow_drop_down</i>
 </button>
 
 <button class="menuBtn" v-on:click="menuVisible = true" v-if="!menuVisible">
