@@ -26,7 +26,7 @@
     <h1>{{ curBookContents.n }}</h1>
     <div class="chap" v-for="(chapter, chnum, index) in book" v-if="chapter != undefined">
       <span class="chnum">{{ chnum }}</span>
-      <span class="verse" v-for="verse in chapter.verses"><sup class="verseNum" v-if="verse.n > 1">{{ verse.n }}</sup><span v-for="word in verse.t" v-if="word != undefined"><span class="tok" v-on:click="selectWord(word)" v-bind:class="{ sel: word.l != undefined && curWord != undefined && word.l == curWord.l }">{{ word.t }}</span>{{ word.w }}</span></span>
+      <span class="verse" v-for="verse in chapter.verses"><sup class="verseNum" v-if="verse.n > 1">{{ verse.n }}</sup><span v-for="word in verse.t" v-if="word != undefined"><span class="tok" v-on:click="selectWord(word)" v-bind:class="isSameWord(word, curWord)">{{ word.t }}</span>{{ word.w }}</span></span>
     </div>
   </div>
 </div>

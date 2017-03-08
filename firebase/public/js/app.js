@@ -15,6 +15,13 @@ var app = new Vue({
         el.addEventListener('scroll',function(e){
           binding.value(e, { scrollTop: el.scrollTop, scrollLeft: el.scrollLeft});
         });
+
+        var spans = el.querySelectorAll('span.chnum');
+        console.log(spans);
+        spans.forEach(function(span) {
+          var rect = span.getBoundingClientRect();
+          console.log(rect);
+        });
       }
     }
   },
@@ -28,6 +35,23 @@ var app = new Vue({
       console.log(word.h);
       console.log(word.w);
       this.curWord = word;
+    },
+
+    isSameWord: function(word1, word2) {
+      if (word1 == undefined || word2 == undefined) {
+        return;
+      }
+      var sameWord = false;
+      if (word1.l != undefined && word2.l != undefined && word1.l == word2.l) {
+        sameWord = true;
+      } else if (word1.l != undefined && word1.l == word2.t) {
+        sameWord = true;
+      } else if (word2.l != undefined && word1.t == word2.l) {
+        sameWord = true;
+      } else if (word1.t == word2.t) {
+        sameWord = true;
+      }
+      return { sel: sameWord}
     },
 
     verseWidth: function(wordCount) {
@@ -78,11 +102,6 @@ var app = new Vue({
       console.log(data.val());
       that.book = data.val();
     });
-
-    var el = document.querySelector('zoomChap span');
-    console.log(el);
-    var rect = el.getBoundingClientRect();
-    console.log(rect);
 
   }
 })

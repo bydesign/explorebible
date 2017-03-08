@@ -1,5 +1,5 @@
 import json, re, urllib, spacy
-from firebase import Firebase
+#from firebase import Firebase
 from slugify import slugify
 import os.path
 import time, random
@@ -37,8 +37,10 @@ def upload_chapters():
             bookname = book['n']
             chapters = []
 
-            for chap in range(book['c']):
-                chnum = chap + 1
+            for chap in book['c']:
+                print chap['n']
+                #print chap['c']
+                chnum = chap['n']
                 name = '%s %d' % (bookname, chnum)
                 print '--------------\nGetting ' + name
                 chapdata = download_chapter(bookname, chnum)
@@ -50,7 +52,7 @@ def upload_chapters():
                     wordcount = len(v['text'].split(' '))
                     wordcounts.append(wordcount)
 
-                print wordcounts
+                #print wordcounts
                 chapters.append({
                     'n': chnum,
                     'c': wordcounts
@@ -60,9 +62,9 @@ def upload_chapters():
 
     save_file(filename, json.dumps(bible, indent=4))
 
-    f = Firebase('https://project-6084703088352496772.firebaseio.com/chapters/en/net/')
-    f.delete()
-    f.put(bible)
+    #f = Firebase('https://project-6084703088352496772.firebaseio.com/chapters/en/net/')
+    #f.delete()
+    #f.put(bible)
 
     print 'saved updated verse counts'
 

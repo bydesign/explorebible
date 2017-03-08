@@ -366,12 +366,13 @@ def download_book(bookname, chapter_count, start_chapter=1):
                         token['l'] = word.lemma_        # lemma root word
                     if word.is_title:
                         token['h'] = word.is_title # is title / heading
-                    if word.whitespace_ == ' ':
-                        token['w'] = word.whitespace_   # whitespace
                     token['s'] = word.pos          # part of speech
                     #token['d'] = word.dep_          # dep
                     #token['g'] = word.tag_,         # tag
                     #token['tw'] = word.text_with_ws,    # text with whitespace
+
+                if word.whitespace_ == ' ':
+                    token['w'] = word.whitespace_   # whitespace
 
                 tokens.append(token)
 
