@@ -6,6 +6,8 @@ var app = new Vue({
     bookName: 'Matthew',
     contents: [],
     curWord: undefined,
+    curWordCount: 0,
+    curWordBkCount: 0,
     menuVisible: false,
     curBookContents: {}
   },
@@ -29,12 +31,31 @@ var app = new Vue({
   methods: {
     selectWord: function(word) {
       console.log(word);
-      console.log(word.s);
-      console.log(word.t);
-      console.log(word.l);
-      console.log(word.h);
-      console.log(word.w);
+      console.log('pos: ' + word.s);
+      console.log('text: ' + word.t);
+      console.log('lemma: ' + word.l);
+      console.log('heading: ' + word.h);
+      console.log('whitespace: ' + word.w);
       this.curWord = word;
+      console.log(word.l);
+      var that = this;
+      this.database.ref('/search/'+word.l).once('value').then(function(data) {
+        var val = data.val();
+        that.curWordCounts = val;
+        that.curWordCount = val.count;
+        that.curWordBkCount = that.getWordCount(that.bookName);
+      });
+    },
+
+    getWordCount: function(bookName) {
+      if (this.curWordCounts == undefined) {
+        return 0;
+      }
+      var bk = this.curWordCounts.refs[bookName];
+      if (bk == undefined) {
+        return 0;
+      }
+      return bk.count;
     },
 
     isSameWord: function(word1, word2) {
@@ -92,6 +113,7 @@ var app = new Vue({
 
     // Get a reference to the database service
     var database = firebase.database();
+    this.database = database;
     database.ref('/chapters/en/net/').once('value').then(function(data) {
       console.log(data.val());
       that.contents = data.val();

@@ -16,7 +16,7 @@
   <div v-for="div in contents" class="tocDiv">
     <h2>{{ div.n }}</h2>
     <ul>
-      <li class="tocBook" v-for="book in div.books" v-bind:class="{ sel: book.n == curBookContents.n }" v-on:click="curBookContents = book">{{ book.n }}</li>
+      <li class="tocBook" v-for="book in div.books" v-bind:class="{ sel: book.n == curBookContents.n }" v-on:click="curBookContents = book">{{ book.n }}<span class="menuWordCount" v-if="curWord != undefined">{{getWordCount(book.n)}}</span></li>
     </ul>
   </div>
 </div>
@@ -41,6 +41,20 @@
 
 <div class="wordStudy" v-if="curWord != undefined">
   <h2>{{ curWord.t }}</h2>
+  <div class="wordInfo">
+    <div class="infoCol">
+      <div class="infoStat">{{curWordCount}}x</div>
+      <h3>Whole Bible</h3>
+    </div>
+    <div class="infoCol">
+      <div class="infoStat">{{curWordBkCount}}x</div>
+      <h3>{{bookName}}</h3>
+    </div>
+    <div class="infoCol">
+      <div class="infoStat">{{curWord.s}}</div>
+      <h3>Part of Speech</h3>
+    </div>
+  </div>
 </div>
 
 <button class="dragBtn">

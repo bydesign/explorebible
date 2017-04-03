@@ -1,5 +1,6 @@
+# coding=utf-8
 import json, re, urllib, spacy
-from firebase import Firebase
+#from firebase import Firebase
 from slugify import slugify
 import os.path
 
@@ -219,6 +220,10 @@ p = re.compile(r'<.*?>')
 q = re.compile(r'([,.:])(?![\s])')
 def fixtxt(data):
     data = data.replace('  ', ' ')
+    data = data.replace(u'’', u"'")
+    data = data.replace(u'‘', u"'")
+    data = data.replace(u'“', u'"')
+    data = data.replace(u'”', u'"')
     data = p.sub('', data)
     #data = q.sub(r'\1 ', data)
     return data
@@ -289,7 +294,16 @@ def save_list(l, url, path):
     print 'Saved %d phrases ...' % len(l)
 
 
+# Fixes a bug where spacy doesn't always recognize punctuation
+# bug was reported here https://github.com/explosion/spaCy/issues/949
+def spacyfix(token):
+    return re.sub(r'[,.?!\'\"“”‘’#]', '', token)
+
 def download_book(bookname, chapter_count, start_chapter=1):
+    from firebase import firebase
+    firebase = firebase.FirebaseApplication('https://project-6084703088352496772.firebaseio.com', None)
+    result = firebase.delete('/en', None)
+
     book_json = []
 
     # load book chapters
@@ -335,13 +349,17 @@ def download_book(bookname, chapter_count, start_chapter=1):
             verse_id = 'en/net/%s/%s/%s' % (slugify(verse['bookname']), verse['chapter'], verse['verse'])
             verse_name = '%s %s:%s' % (verse['bookname'], verse['chapter'], verse['verse'])
             span = doc[token_first : token_last]
-            verse_positions.append({
+            vdict = {
                 'id': verse_id,
                 'span': span,
                 'name': verse_name,
                 'num': verse['verse'],
-                'pretitle': verse['title']
-            })
+                #'pretitle': verse['title']
+            }
+            if verse.has_key('title'):
+                vdict['pretitle'] = verse['title']
+
+            verse_positions.append(vdict)
 
         chapdict = {
             'name': '%s %s' % (bookname, chnum),
@@ -354,6 +372,7 @@ def download_book(bookname, chapter_count, start_chapter=1):
             }
             chapdict['verses'].append(vdict)
             tokens = vdict['t']
+            index = 0
             for word in v['span']:
                 token = {
                     't': unicode(word)   # word text
@@ -366,8 +385,8 @@ def download_book(bookname, chapter_count, start_chapter=1):
                         token['l'] = word.lemma_        # lemma root word
                     if word.is_title:
                         token['h'] = word.is_title # is title / heading
-                    token['s'] = word.pos          # part of speech
-                    #token['d'] = word.dep_          # dep
+                    token['s'] = word.pos_          # part of speech
+                    token['d'] = word.dep_          # dep
                     #token['g'] = word.tag_,         # tag
                     #token['tw'] = word.text_with_ws,    # text with whitespace
 
@@ -377,27 +396,73 @@ def download_book(bookname, chapter_count, start_chapter=1):
                 tokens.append(token)
 
                 if word.dep_ not in NODEP and word.pos_ not in NOPOS:
-                    add_phrase(word.lemma_, v)
+                    #add_phrase(word.lemma_, v)
+                    verse_id = str(chnum) + ':' + str(v['num'])
+                    lemma = spacyfix(word.lemma_)
+                    if lemma:
+                        if SEARCH_DICT.has_key(lemma):
+                            w = SEARCH_DICT[lemma]
+                            w['count'] += 1
+                            curbook = w['refs'][bookname]
+                            curbook['count'] += 1
 
-            #vdict['length'] = len(tokens)
+                            if curbook.has_key(verse_id):
+                                curbook[verse_id].append(index)
+                            else:
+                                curbook[verse_id] = [index]
 
-        chapid = 'en/net/%s/%s' % (slugify(bookname), chnum)
-        f = Firebase('https://project-6084703088352496772.firebaseio.com/' + chapid)
-        f.put(chapdict)
-        path = 'firebase/public/data/net_parsed/%s-%d.json' % (slugify(bookname), chnum)
-        save_file(path, json.dumps(chapdict, separators=(',', ':')))
-        print 'Saving %s ...' % chapid
+                        else:
+                            SEARCH_DICT[lemma] = {
+                                'count': 1,
+                                'text': word.lemma_,
+                                'refs': {
+                                    bookname: {
+                                        'count': 1,
+                                        verse_id: [index]
+                                    }
+                                }
+                            }
 
-    searchdict = {}
-    for s in SEARCH_LIST:
-        key = slugify(s['text'])
-        if key:
-            searchdict[key] = s
+                index += 1
+
+                ''' /search/[word]/
+                # {
+                    count: 23,
+                    text: 'word',
+                    refs: {
+                        matthew: {
+                            count: 3,
+                            '1:23': [ 4, 8, 9 ] {token index}
+                        }
+                    }
+                }
+                '''
+
+        chapid = '/en/net/%s' % slugify(bookname)
+        #print 'Saving %s ...' % chapid
+        result = firebase.put(chapid, chnum, chapdict)#, {'print': 'pretty'}, {'X_FANCY_HEADER': 'VERY FANCY'})
+
+    #print json.dumps(SEARCH_DICT, separators=(',', ':'))
+
+    #searchdict = {}
+    #for s in SEARCH_LIST:
+    #    key = slugify(s['text'])
+    #    if key:
+    #        searchdict[key] = s
 
     #save_file('firebase/public/data/search/search_terms.json', json.dumps(searchdict))
-    #print 'Saving %d search terms ...' % len(SEARCH_LIST)
-    #f = Firebase('https://project-6084703088352496772.firebaseio.com/search/')
-    #f.put(searchdict)
+
+
+    print 'Saving %d search terms ...' % len(SEARCH_DICT)
+    #print json.dumps(SEARCH_DICT)
+    #result = firebase.delete('/search', None)
+    #print result
+
+    #result = firebase.put('/', 'search', SEARCH_DICT)
+
+    #for key in SEARCH_DICT:
+    #    print key
+    #    result = firebase.post('/search/'+key, SEARCH_DICT[key])
 
     #url = 'https://project-6084703088352496772.firebaseio.com/phrases/'
     #path = 'firebase/public/data/search/search_phrases.json'
@@ -405,8 +470,6 @@ def download_book(bookname, chapter_count, start_chapter=1):
 
 
 download_book('Matthew', 28, 1)
-
-
 
 def upload_divisions():
     books_file = open('firebase/public/data/books.json')
